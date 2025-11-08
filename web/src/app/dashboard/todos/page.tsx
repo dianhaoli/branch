@@ -1,9 +1,10 @@
 'use client';
 
 import { useAuthContext } from '@/contexts/AuthContext';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useState } from 'react';
 import type { Todo } from '@dan/shared';
+import { Navbar } from '@/components/navbar';
+import { Clock } from 'lucide-react';
 
 export default function TodosPage() {
   const { user } = useAuthContext();
@@ -71,15 +72,16 @@ export default function TodosPage() {
   const completedTodos = todos.filter((t) => t.status === 'completed');
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="container mx-auto px-4 py-8 md:px-6 lg:px-8 max-w-7xl space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Study To-Dos</h1>
-          <p className="text-gray-600 mt-1">Plan your study sessions and track completion.</p>
+          <h1 className="text-3xl font-semibold text-foreground">Study To-Dos</h1>
+          <p className="text-muted-foreground mt-1">Plan your study sessions and track completion.</p>
         </div>
 
         {/* Add Todo */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
+        <div className="rounded-2xl bg-card border border-border/40 p-6">
           <div className="flex gap-3">
             <input
               type="text"
@@ -87,11 +89,11 @@ export default function TodosPage() {
               onChange={(e) => setNewTodo(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleAddTodo()}
               placeholder="What do you want to study?"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="flex-1 px-4 py-3 border border-input rounded-xl focus:outline-none focus:ring-1 focus:ring-ring bg-background text-foreground"
             />
             <button
               onClick={handleAddTodo}
-              className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-colors"
             >
               Add
             </button>
@@ -100,8 +102,8 @@ export default function TodosPage() {
 
         {/* Pending Todos */}
         {pendingTodos.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">To Do</h3>
+          <div className="rounded-2xl bg-card border border-border/40 p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">To Do</h3>
             <div className="space-y-3">
               {pendingTodos.map((todo) => (
                 <TodoItem key={todo.id} todo={todo} onToggle={toggleTodo} />
@@ -112,8 +114,8 @@ export default function TodosPage() {
 
         {/* Completed Todos */}
         {completedTodos.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Completed</h3>
+          <div className="rounded-2xl bg-card border border-border/40 p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Completed</h3>
             <div className="space-y-3">
               {completedTodos.map((todo) => (
                 <TodoItem key={todo.id} todo={todo} onToggle={toggleTodo} />
@@ -121,8 +123,8 @@ export default function TodosPage() {
             </div>
           </div>
         )}
-      </div>
-    </DashboardLayout>
+      </main>
+    </div>
   );
 }
 
@@ -140,7 +142,7 @@ function TodoItem({ todo, onToggle }: { todo: Todo; onToggle: (id: string) => vo
 
   return (
     <div
-      className={`flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-primary-300 transition-colors ${
+      className={`flex items-center gap-4 p-4 border border-border/40 rounded-xl hover:bg-accent/30 transition-colors ${
         todo.status === 'completed' ? 'opacity-60' : ''
       }`}
     >
@@ -148,19 +150,19 @@ function TodoItem({ todo, onToggle }: { todo: Todo; onToggle: (id: string) => vo
         onClick={() => onToggle(todo.id)}
         className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
           todo.status === 'completed'
-            ? 'bg-primary-600 border-primary-600'
-            : 'border-gray-300 hover:border-primary-500'
+            ? 'bg-primary border-primary'
+            : 'border-input hover:border-ring'
         }`}
       >
         {todo.status === 'completed' && <span className="text-white text-sm">✓</span>}
       </button>
 
       <div className="flex-1">
-        <div className={`font-medium ${todo.status === 'completed' ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+        <div className={`font-medium ${todo.status === 'completed' ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
           {todo.title}
         </div>
-        <div className="flex items-center gap-3 mt-1 text-sm text-gray-600">
-          {todo.estimatedMinutes && <span>⏱️ {todo.estimatedMinutes}min</span>}
+        <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
+          {todo.estimatedMinutes && <span className="inline-flex items-center gap-1"><Clock className="w-4 h-4" /> {todo.estimatedMinutes}min</span>}
           <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getPriorityColor()}`}>
             {todo.priority}
           </span>

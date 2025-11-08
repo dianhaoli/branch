@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, BarChart3, Clock, User, LogOut } from "lucide-react"
+import { Home, BarChart3, Clock, User, LogOut, Trophy, Users, CheckSquare } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -14,9 +14,12 @@ export function Navbar() {
 
   const links = [
     { href: "/", label: "Home", icon: Home },
-    { href: "/dashboard/sessions", label: "Sessions", icon: Clock },
-    { href: "/dashboard/insights", label: "Analytics", icon: BarChart3 },
     { href: "/dashboard", label: "Dashboard", icon: User },
+    { href: "/dashboard/sessions", label: "Sessions", icon: Clock },
+    { href: "/dashboard/social", label: "Social", icon: Users },
+    { href: "/dashboard/leaderboard", label: "Leaderboard", icon: Trophy },
+    { href: "/dashboard/todos", label: "Todos", icon: CheckSquare },
+    { href: "/dashboard/insights", label: "Analytics", icon: BarChart3 },
   ]
 
   const handleSignIn = async () => {
@@ -60,7 +63,7 @@ export function Navbar() {
           <div className="flex items-center gap-1">
             {user && links.map((link) => {
               const Icon = link.icon
-              const isActive = pathname === link.href
+              const isActive = pathname?.startsWith(link.href)
 
               return (
                 <Link

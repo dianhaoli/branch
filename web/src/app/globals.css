@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --font-inter: 'Inter', sans-serif;
@@ -34,17 +32,11 @@ body { @apply antialiased; background: var(--bg); color: var(--ink); }
   height: 8px;
 }
 
-::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-white/10;
-}
+::-webkit-scrollbar-track { background-color: var(--scrollbar-track); }
 
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-white/20 rounded-full;
-}
+::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 9999px; }
 
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-white/30;
-}
+::-webkit-scrollbar-thumb:hover { background-color: var(--scrollbar-thumb-hover); }
 
 /* Animations */
 @keyframes shimmer {
@@ -64,7 +56,11 @@ body { @apply antialiased; background: var(--bg); color: var(--ink); }
 
 /* Gradient text */
 .gradient-text {
-  @apply bg-gradient-to-r from-branch-mint to-branch-medium bg-clip-text text-transparent;
+  /* Avoid @apply with custom colors to prevent unknown utility errors in v4 */
+  background-image: linear-gradient(to right, #c9f2c7, #96be8c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* Card hover effect */
@@ -73,15 +69,30 @@ body { @apply antialiased; background: var(--bg); color: var(--ink); }
 }
 
 /* Focus ring */
-.focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)] focus:ring-offset-2;
+.focus-ring:focus {
+  outline: none;
+  outline-offset: 2px;
+  /* Approximate Tailwind's ring using a focus box-shadow */
+  box-shadow: 0 0 0 2px hsl(var(--ring));
 }
 
 /* Generic card utility */
-.card { @apply rounded-2xl shadow-subtle bg-white dark:bg-[color:var(--surface)] border border-transparent; }
+.card {
+  border-radius: 16px; /* matches rounded-2xl */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06); /* was shadow-subtle */
+  background-color: #ffffff;
+  border: 1px solid transparent;
+}
+.dark .card {
+  background-color: var(--surface);
+}
 
 @layer base {
   :root {
+    /* Scrollbar colors */
+    --scrollbar-track: #f3f4f6; /* gray-100 */
+    --scrollbar-thumb: #d1d5db; /* gray-300 */
+    --scrollbar-thumb-hover: #9ca3af; /* gray-400 */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -109,6 +120,9 @@ body { @apply antialiased; background: var(--bg); color: var(--ink); }
     --radius: 0.5rem;
   }
   .dark {
+    --scrollbar-track: rgba(255,255,255,0.10);
+    --scrollbar-thumb: rgba(255,255,255,0.20);
+    --scrollbar-thumb-hover: rgba(255,255,255,0.30);
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
@@ -138,10 +152,13 @@ body { @apply antialiased; background: var(--bg); color: var(--ink); }
 
 @layer base {
   * {
-    @apply border-border;
+    /* Replace @apply border-border */
+    border-color: hsl(var(--border));
   }
   body {
-    @apply bg-background text-foreground;
+    /* Replace @apply bg-background text-foreground */
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 

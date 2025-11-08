@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuthContext } from '@/contexts/AuthContext';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import { Navbar } from '@/components/navbar';
 import { useState } from 'react';
 import { formatDuration, getRelativeTime, formatDate } from '@dan/shared';
 
@@ -43,12 +43,13 @@ export default function SessionsPage() {
   if (!user) return null;
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="container mx-auto px-4 py-8 md:px-6 lg:px-8 max-w-7xl space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Study Sessions</h1>
-            <p className="text-gray-600 mt-1">Review your study history and performance.</p>
+            <h1 className="text-3xl font-semibold text-foreground">Study Sessions</h1>
+            <p className="text-muted-foreground mt-1">Review your study history and performance.</p>
           </div>
 
           {/* Filter */}
@@ -57,10 +58,10 @@ export default function SessionsPage() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-xl font-medium transition-colors ${
                   filter === f
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-accent/50 text-foreground hover:bg-accent/60'
                 }`}
               >
                 {f === 'all' ? 'All Time' : f === 'week' ? 'This Week' : 'This Month'}
@@ -71,75 +72,74 @@ export default function SessionsPage() {
 
         {/* Summary Cards */}
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <div className="text-sm text-gray-600 mb-2">Total Study Time</div>
-            <div className="text-3xl font-bold text-gray-900">
+          <div className="rounded-2xl bg-card border border-border/40 p-6">
+            <div className="text-sm text-muted-foreground mb-2">Total Study Time</div>
+            <div className="text-3xl font-semibold text-foreground">
               {formatDuration(sessions.reduce((sum, s) => sum + s.duration / 60, 0))}
             </div>
           </div>
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <div className="text-sm text-gray-600 mb-2">Average Focus</div>
-            <div className="text-3xl font-bold text-gray-900">
+          <div className="rounded-2xl bg-card border border-border/40 p-6">
+            <div className="text-sm text-muted-foreground mb-2">Average Focus</div>
+            <div className="text-3xl font-semibold text-foreground">
               {Math.round((sessions.reduce((sum, s) => sum + s.focusScore, 0) / sessions.length) * 100)}%
             </div>
           </div>
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <div className="text-sm text-gray-600 mb-2">Total XP Earned</div>
-            <div className="text-3xl font-bold text-gray-900">
+          <div className="rounded-2xl bg-card border border-border/40 p-6">
+            <div className="text-sm text-muted-foreground mb-2">Total XP Earned</div>
+            <div className="text-3xl font-semibold text-foreground">
               {sessions.reduce((sum, s) => sum + s.xpEarned, 0)} XP
             </div>
           </div>
         </div>
 
         {/* Sessions List */}
-        <div className="bg-white rounded-2xl shadow-md">
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Session History</h3>
+        <div className="rounded-2xl bg-card border border-border/40">
+          <div className="p-6 border-b border-border/40">
+            <h3 className="text-lg font-semibold text-foreground">Session History</h3>
           </div>
 
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-border/40">
             {sessions.map((session) => (
-              <div key={session.id} className="p-6 hover:bg-gray-50 transition-colors">
+              <div key={session.id} className="p-6 hover:bg-accent/30 transition-colors">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-1">{session.topic}</h4>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <h4 className="text-lg font-semibold text-foreground mb-1">{session.topic}</h4>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span>{formatDate(session.startTime)}</span>
                       <span>•</span>
                       <span>{getRelativeTime(session.startTime)}</span>
                     </div>
                   </div>
-                  <div className="px-4 py-2 bg-primary-50 text-primary-700 rounded-lg font-semibold">
+                  <div className="px-4 py-2 bg-primary/10 text-primary rounded-lg font-semibold">
                     +{session.xpEarned} XP
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4 mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Duration:</span>
-                    <span className="font-medium">{formatDuration(session.duration / 60)}</span>
+                    <span className="text-sm text-muted-foreground">Duration:</span>
+                    <span className="font-medium text-foreground">{formatDuration(session.duration / 60)}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Focus:</span>
+                    <span className="text-sm text-muted-foreground">Focus:</span>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden w-32">
+                      <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden w-32">
                         <div
-                          className="h-full bg-primary-600 rounded-full"
+                          className="h-full bg-primary rounded-full"
                           style={{ width: `${session.focusScore * 100}%` }}
                         />
                       </div>
-                      <span className="font-medium">{Math.round(session.focusScore * 100)}%</span>
+                      <span className="font-medium text-foreground">{Math.round(session.focusScore * 100)}%</span>
                     </div>
                   </div>
                 </div>
 
                 {session.aiSummary && (
-                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                  <div className="bg-primary/5 border border-primary/10 rounded-lg p-3">
                     <div className="flex items-start gap-2">
-                      <span className="text-lg">🧠</span>
                       <div className="flex-1">
-                        <div className="text-xs font-medium text-purple-700 mb-1">AI Summary</div>
-                        <p className="text-sm text-gray-700">{session.aiSummary}</p>
+                        <div className="text-xs font-medium text-primary mb-1">AI Summary</div>
+                        <p className="text-sm text-foreground/80">{session.aiSummary}</p>
                       </div>
                     </div>
                   </div>
@@ -148,8 +148,8 @@ export default function SessionsPage() {
             ))}
           </div>
         </div>
-      </div>
-    </DashboardLayout>
+      </main>
+    </div>
   );
 }
 

@@ -1,9 +1,10 @@
 'use client';
 
 import { useAuthContext } from '@/contexts/AuthContext';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useEffect, useState } from 'react';
 import type { AIInsight, WeeklySummary } from '@dan/shared';
+import { Navbar } from '@/components/navbar';
+import { Sun, BookOpen, Target, BarChart3 } from 'lucide-react';
 
 export default function InsightsPage() {
   const { user } = useAuthContext();
@@ -50,48 +51,45 @@ export default function InsightsPage() {
   if (!user) return null;
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="container mx-auto px-4 py-8 md:px-6 lg:px-8 max-w-7xl space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">AI Insights</h1>
-          <p className="text-gray-600 mt-1">Personalized feedback powered by AI to optimize your study habits.</p>
+          <h1 className="text-3xl font-semibold text-foreground">AI Insights</h1>
+          <p className="text-muted-foreground mt-1">Personalized feedback powered by AI to optimize your study habits.</p>
         </div>
 
         {/* Weekly Summary */}
-        <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg p-8 text-white">
+        <div className="rounded-2xl bg-card border border-border/40 p-8">
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-4xl">📊</span>
+            <BarChart3 className="w-5 h-5 text-primary" />
             <div>
-              <h2 className="text-2xl font-bold">This Week's Summary</h2>
-              <p className="text-sm opacity-90">Nov 1 - Nov 8, 2025</p>
+              <h2 className="text-2xl font-semibold text-foreground">This Week's Summary</h2>
+              <p className="text-sm text-muted-foreground">Nov 1 - Nov 8, 2025</p>
             </div>
           </div>
 
           <div className="grid md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4">
-              <div className="text-xs opacity-75 mb-1">Total Hours</div>
-              <div className="text-3xl font-bold">12.5h</div>
+            <div className="rounded-xl bg-accent/30 p-4">
+              <div className="text-xs text-muted-foreground mb-1">Total Hours</div>
+              <div className="text-3xl font-semibold text-foreground">12.5h</div>
             </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4">
-              <div className="text-xs opacity-75 mb-1">Sessions</div>
-              <div className="text-3xl font-bold">18</div>
+            <div className="rounded-xl bg-accent/30 p-4">
+              <div className="text-xs text-muted-foreground mb-1">Sessions</div>
+              <div className="text-3xl font-semibold text-foreground">18</div>
             </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4">
-              <div className="text-xs opacity-75 mb-1">Avg Focus</div>
-              <div className="text-3xl font-bold">87%</div>
+            <div className="rounded-xl bg-accent/30 p-4">
+              <div className="text-xs text-muted-foreground mb-1">Avg Focus</div>
+              <div className="text-3xl font-semibold text-foreground">87%</div>
             </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4">
-              <div className="text-xs opacity-75 mb-1">XP Gained</div>
-              <div className="text-3xl font-bold">1,250</div>
+            <div className="rounded-xl bg-accent/30 p-4">
+              <div className="text-xs text-muted-foreground mb-1">XP Gained</div>
+              <div className="text-3xl font-semibold text-foreground">1,250</div>
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-            <p className="text-sm leading-relaxed">
-              Excellent work this week! You've maintained consistent study habits and your focus has improved significantly.
-              Your productivity peaks in the morning hours - consider tackling challenging topics during this time.
-              Keep up the momentum to reach your weekly goal!
-            </p>
+          <div className="rounded-xl bg-accent/20 p-4">
+            <p className="text-sm leading-relaxed text-foreground/80">Excellent work this week! You've maintained consistent study habits and your focus has improved significantly. Your productivity peaks in the morning hours - consider tackling challenging topics during this time. Keep up the momentum to reach your weekly goal!</p>
           </div>
         </div>
 
@@ -103,27 +101,27 @@ export default function InsightsPage() {
         </div>
 
         {/* Productivity Tips */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Productivity Tips</h3>
+        <div className="rounded-2xl bg-card border border-border/40 p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Productivity Tips</h3>
           <div className="space-y-3">
             {[
-              { icon: '🎯', title: 'Set Clear Goals', description: 'Define specific topics before each session' },
-              { icon: '⏰', title: 'Use Time Blocks', description: 'Study in 25-50 minute focused intervals' },
-              { icon: '🔕', title: 'Minimize Distractions', description: 'Close unnecessary tabs and notifications' },
-              { icon: '☕', title: 'Take Breaks', description: 'Short breaks improve focus and retention' },
+              { icon: <Target className="w-4 h-4" />, title: 'Set Clear Goals', description: 'Define specific topics before each session' },
+              { icon: <Sun className="w-4 h-4" />, title: 'Use Time Blocks', description: 'Study in 25-50 minute focused intervals' },
+              { icon: <BookOpen className="w-4 h-4" />, title: 'Minimize Distractions', description: 'Close unnecessary tabs and notifications' },
+              { icon: <BarChart3 className="w-4 h-4" />, title: 'Track Progress', description: 'Review trends weekly to adjust plan' },
             ].map((tip, idx) => (
-              <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                <div className="text-2xl">{tip.icon}</div>
+              <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-accent/20">
+                <div className="text-primary">{tip.icon}</div>
                 <div>
-                  <div className="font-medium text-gray-900">{tip.title}</div>
-                  <div className="text-sm text-gray-600">{tip.description}</div>
+                  <div className="font-medium text-foreground">{tip.title}</div>
+                  <div className="text-sm text-muted-foreground">{tip.description}</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
-    </DashboardLayout>
+      </main>
+    </div>
   );
 }
 
@@ -144,9 +142,9 @@ function InsightCard({ insight }: { insight: AIInsight }) {
   };
 
   return (
-    <div className={`bg-gradient-to-br ${getBackgroundColor()} rounded-2xl shadow-md p-6 text-white`}>
-      <h3 className="text-xl font-bold mb-2">{insight.title}</h3>
-      <p className="text-sm opacity-90">{insight.message}</p>
+    <div className="rounded-2xl bg-card border border-border/40 p-6">
+      <h3 className="text-xl font-semibold text-foreground mb-2">{insight.title}</h3>
+      <p className="text-sm text-muted-foreground">{insight.message}</p>
     </div>
   );
 }

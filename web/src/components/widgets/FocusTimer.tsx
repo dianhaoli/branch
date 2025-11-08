@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 export default function FocusTimer() {
   const [seconds, setSeconds] = useState(25 * 60);
