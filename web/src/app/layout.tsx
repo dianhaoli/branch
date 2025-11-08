@@ -1,41 +1,48 @@
-import type { Metadata } from 'next';
-import { Inter, Rubik } from 'next/font/google';
-import './globals.css';
-import { AuthProvider } from '@/contexts/AuthContext';
-import { Toaster } from 'react-hot-toast';
+import type React from "react"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
+import "./globals.css"
+import { Providers } from "./providers"
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
-
-const rubik = Rubik({ 
-  subsets: ['latin'],
-  variable: '--font-rubik',
-});
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: 'DAN - Strava for Studying',
-  description: 'Track, gamify, and share your focus',
+  title: "Branch - Natural Study Tracking",
+  description: "Track your learning journey with calm, focused productivity",
+  generator: "v0.app",
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      {
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/icon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    apple: "/apple-icon.png",
   },
-};
+}
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${rubik.variable} font-sans bg-gray-50`}>
-        <AuthProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased`} suppressHydrationWarning>
+        <Providers>
           {children}
-          <Toaster position="top-right" />
-        </AuthProvider>
+        </Providers>
+        <Analytics />
       </body>
     </html>
-  );
+  )
 }
-

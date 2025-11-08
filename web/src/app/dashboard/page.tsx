@@ -3,13 +3,12 @@
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
-import StatsOverview from '@/components/dashboard/StatsOverview';
-import CurrentSession from '@/components/dashboard/CurrentSession';
-import XPProgress from '@/components/dashboard/XPProgress';
-import StreakTracker from '@/components/dashboard/StreakTracker';
-import RecentSessions from '@/components/dashboard/RecentSessions';
-import WeeklyChart from '@/components/dashboard/WeeklyChart';
+import { Navbar } from "@/components/navbar"
+import { StatsCards } from "@/components/stats-cards"
+import { RecentSessions } from "@/components/recent-sessions"
+import { GrowthChart } from "@/components/growth-chart"
+import { FocusTimer } from "@/components/focus-timer"
+import { MotivationalQuote } from "@/components/motivational-quote"
 
 export default function Dashboard() {
   const { user, loading } = useAuthContext();
@@ -23,8 +22,8 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -32,37 +31,39 @@ export default function Dashboard() {
   if (!user) return null;
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, {user.displayName}!
+    <div className="min-h-screen bg-background">
+      <Navbar />
+
+      <main className="container mx-auto px-4 py-8 md:px-6 lg:px-8 max-w-7xl">
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-2 text-balance">
+            Welcome back, {user.displayName || 'Learner'}
           </h1>
-          <p className="text-gray-600 mt-1">Track your progress and stay motivated.</p>
+          <p className="text-muted-foreground text-lg">Your growth continues today</p>
         </div>
 
-        {/* Top Row: Current Session + Stats */}
-        <div className="grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <CurrentSession />
+        {/* Motivational Quote */}
+        <MotivationalQuote />
+
+        {/* Stats Cards */}
+        <StatsCards />
+
+        {/* Two Column Layout */}
+        <div className="grid gap-6 lg:grid-cols-3 mt-6">
+          {/* Main Content - 2 columns */}
+          <div className="lg:col-span-2 space-y-6">
+            <GrowthChart />
+            <RecentSessions />
           </div>
+
+          {/* Sidebar - 1 column */}
           <div className="space-y-6">
-            <XPProgress user={user} />
-            <StreakTracker user={user} />
+            <FocusTimer />
           </div>
         </div>
-
-        {/* Stats Overview */}
-        <StatsOverview userId={user.id} />
-
-        {/* Weekly Chart */}
-        <WeeklyChart userId={user.id} />
-
-        {/* Recent Sessions */}
-        <RecentSessions userId={user.id} />
-      </div>
-    </DashboardLayout>
+      </main>
+    </div>
   );
 }
 
